@@ -1,15 +1,24 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"time"
-	"github.com/minhvu2510/golang-gin/utils"
+	//"github.com/minhvu2510/golang-gin/utils"
+	"github.com/minhvu2510/golang-gin/pkg/setting"
 )
 
-
+func init() {
+	fmt.Println("----int setting server app----")
+	setting.Setup()
+	//models.Setup()
+	//logging.Setup()
+	//gredis.Setup()
+	//util.Setup()
+}
 func main() {
-	utils.Notify()
+	fmt.Println("----int main server app----")
+	//utils.Notify()
 	router := gin.Default()
 
 	router.GET("/ping", func(c *gin.Context) {
@@ -17,11 +26,15 @@ func main() {
 			"message": "pong",
 		})
 	})
+	port := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
+	readTimeout := setting.ServerSetting.ReadTimeout
+	writeTimeout := setting.ServerSetting.WriteTimeout
+	fmt.Println(port)
 	s := &http.Server{
-		Addr:           ":8080",
+		Addr:           port,
 		Handler:        router,
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
+		ReadTimeout:    readTimeout,
+		WriteTimeout:   writeTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 	s.ListenAndServe()

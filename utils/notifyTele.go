@@ -2,9 +2,9 @@ package utils
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"io/ioutil"
 	"net/url"
 	"time"
 )
@@ -27,7 +27,7 @@ func Notify() {
 	//url_i := url.URL{}
 	//url_proxy, _ := url_i.Parse("10.60.117.113:8080")
 
-	proxyStr := "http://10.60.117.113:80"
+	proxyStr := "http://10.60.117.113:8080"
 	proxyURL, err := url.Parse(proxyStr)
 	if err != nil {
 		log.Println(err)
@@ -60,4 +60,5 @@ func Notify() {
 		return
 	}
 	fmt.Println(string(body))
+	log.Println(string(body))
 }
