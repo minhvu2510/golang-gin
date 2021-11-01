@@ -26,6 +26,16 @@ type Server struct {
 }
 var ServerSetting = &Server{}
 
+type Database struct {
+	Type        string
+	User        string
+	Password    string
+	Host        string
+	Name        string
+	TablePrefix string
+}
+
+var DatabaseSetting = &Database{}
 var cfg *ini.File
 // Setup initialize the configuration instance
 func Setup() {
@@ -37,7 +47,7 @@ func Setup() {
 
 	mapTo("app", AppSetting)
 	mapTo("server", ServerSetting)
-
+	mapTo("database", DatabaseSetting)
 
 	//AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
