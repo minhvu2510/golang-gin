@@ -1,0 +1,19 @@
+docker run \
+--detach \
+--name=mysql \
+--env="MYSQL_ROOT_PASSWORD=hanoi2021" \
+--publish 6603:3306 \
+--volume=/root/docker/mysql/conf.d:/etc/mysql/conf.d \
+mysql
+docker exec -it mysql mysql -u root -p
+
+CREATE USER 'dev'@'localhost' IDENTIFIED BY 'devpassword';
+GRANT ALL PRIVILEGES ON * . * TO 'dev'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE USER 'gingonic'@'172.17.0.1' IDENTIFIED BY 'hanoi2021';
+GRANT ALL PRIVILEGES ON *.* TO 'gingonic'@'172.17.0.1' WITH GRANT OPTION;
+Su dung datagrid or mysql workpen append file mysql de khoi tao data
+create schema blog;
+-----redis--------
+sudo docker run --name my-redis-container -d redis
