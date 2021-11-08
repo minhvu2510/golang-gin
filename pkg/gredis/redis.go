@@ -1,4 +1,4 @@
-ackage gredis
+package gredis
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/gomodule/redigo/redis"
 
-	"github.com/EDDYCJY/go-gin-example/pkg/setting"
+	"github.com/minhvu2510/golang-gin/pkg/setting"
 )
 
 var RedisConn *redis.Pool

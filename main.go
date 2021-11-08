@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/minhvu2510/golang-gin/pkg/gredis"
+	"github.com/minhvu2510/golang-gin/pkg/util"
 
 	//"github.com/minhvu2510/golang-gin/utils" // notify via telegram
 
@@ -18,12 +20,13 @@ func init() {
 	setting.Setup()
 	models.Setup()
 	logging.Setup()
-	//gredis.Setup()
-	//util.Setup()
+	gredis.Setup()
+	util.Setup()
 }
 func main() {
 	fmt.Println("----int main server app----")
 	//utils.Notify()
+	// router test
 	router := gin.Default()
 
 	router.GET("/ping", func(c *gin.Context) {
@@ -31,6 +34,8 @@ func main() {
 			"message": "pong",
 		})
 	})
+	// setup router mới
+
 	fmt.Println("+++++", setting.ServerSetting)
 	port := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
 	readTimeout := setting.ServerSetting.ReadTimeout
