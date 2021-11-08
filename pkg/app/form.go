@@ -6,7 +6,7 @@ import (
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 
-	"github.com/EDDYCJY/go-gin-example/pkg/e"
+	"github.com/minhvu2510/golang-gin/pkg/e"
 )
 
 // BindAndValid binds and validates data

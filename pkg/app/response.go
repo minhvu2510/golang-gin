@@ -1,16 +1,27 @@
 package app
 
 import (
-	"github.com/astaxie/beego/validation"
+	"github.com/gin-gonic/gin"
 
-	"github.com/minhvu2510/golang-gin/pkg/logging"
+	"github.com/minhvu2510/golang-gin/pkg/e"
 )
 
-// MarkErrors logs error logs
-func MarkErrors(errors []*validation.Error) {
-	for _, err := range errors {
-		logging.Info(err.Key, err.Message)
-	}
+type Gin struct {
+	C *gin.Context
+}
 
+type Response struct {
+	Code int         `json:"code"`
+	Msg  string      `json:"msg"`
+	Data interface{} `json:"data"`
+}
+
+// Response setting gin.JSON
+func (g *Gin) Response(httpCode, errCode int, data interface{}) {
+	g.C.JSON(httpCode, Response{
+		Code: errCode,
+		Msg:  e.GetMsg(errCode),
+		Data: data,
+	})
 	return
 }

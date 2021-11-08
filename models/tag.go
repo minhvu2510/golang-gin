@@ -39,6 +39,7 @@ func AddTag(name string, state int, createdBy string) error {
 
 	return nil
 }
+
 // GetTags gets a list of tags based on paging and constraints
 func GetTags(pageNum int, pageSize int, maps interface{}) ([]Tag, error) {
 	var (
