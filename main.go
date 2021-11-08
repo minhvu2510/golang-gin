@@ -2,17 +2,22 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
-	//"github.com/minhvu2510/golang-gin/utils"
+
+	"github.com/gin-gonic/gin"
+
+	//"github.com/minhvu2510/golang-gin/utils" // notify via telegram
+
+	"github.com/minhvu2510/golang-gin/models"
+	"github.com/minhvu2510/golang-gin/pkg/logging"
 	"github.com/minhvu2510/golang-gin/pkg/setting"
 )
 
 func init() {
 	fmt.Println("----int setting server app----")
 	setting.Setup()
-	//models.Setup()
-	//logging.Setup()
+	models.Setup()
+	logging.Setup()
 	//gredis.Setup()
 	//util.Setup()
 }
@@ -26,6 +31,7 @@ func main() {
 			"message": "pong",
 		})
 	})
+	fmt.Println("+++++", setting.ServerSetting)
 	port := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
 	readTimeout := setting.ServerSetting.ReadTimeout
 	writeTimeout := setting.ServerSetting.WriteTimeout
@@ -37,6 +43,8 @@ func main() {
 		WriteTimeout:   writeTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
+	// log.Printf("[info] start http server listening %s", endPoint)
+	// logging.Info("loi khong xac dinh")
 	s.ListenAndServe()
 	//http.ListenAndServe(":8080", router)
 

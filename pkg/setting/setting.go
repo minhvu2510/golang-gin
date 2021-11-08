@@ -1,8 +1,10 @@
 package setting
 
 import (
+	"fmt"
 	"log"
 	"time"
+
 	"github.com/go-ini/ini"
 )
 
@@ -13,10 +15,15 @@ type App struct {
 
 	RuntimeRootPath string
 
-	ImageSavePath  string
+	ImageSavePath string
+
+	LogSavePath string
+	LogSaveName string
+	LogFileExt  string
+	TimeFormat  string
 }
 
-var AppSetting = &App{}  // var q *App; q = &App{}
+var AppSetting = &App{} // var q *App; q = &App{}
 
 type Server struct {
 	RunMode      string
@@ -24,6 +31,7 @@ type Server struct {
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 }
+
 var ServerSetting = &Server{}
 
 type Database struct {
@@ -35,12 +43,24 @@ type Database struct {
 	TablePrefix string
 }
 
+type Redis struct {
+	Host        string
+	Password    string
+	MaxIdle     int
+	MaxActive   int
+	IdleTimeout time.Duration
+}
+
+var RedisSetting = &Redis{}
+
 var DatabaseSetting = &Database{}
 var cfg *ini.File
+
 // Setup initialize the configuration instance
 func Setup() {
 	var err error
 	cfg, err = ini.Load("conf/app.ini")
+	fmt.Println(cfg.Section("database"))
 	if err != nil {
 		log.Fatalf("setting.Setup, fail to parse 'conf/app.ini': %v", err)
 	}
@@ -48,17 +68,13 @@ func Setup() {
 	mapTo("app", AppSetting)
 	mapTo("server", ServerSetting)
 	mapTo("database", DatabaseSetting)
+	mapTo("redis", RedisSetting)
 
 	//AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
 	ServerSetting.WriteTimeout = ServerSetting.WriteTimeout * time.Second
-	//RedisSetting.IdleTimeout = RedisSetting.IdleTimeout * time.Second
+	RedisSetting.IdleTimeout = RedisSetting.IdleTimeout * time.Second
 }
-
-
-
-
-
 
 // mapTo map section
 func mapTo(section string, v interface{}) {

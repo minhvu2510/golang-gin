@@ -1,12 +1,15 @@
 package models
-// Kết nối db, khởi tạo base field db articlae, create , update, delete
+
 import (
 	"fmt"
-	"github.com/EDDYCJY/go-gin-example/pkg/setting"
+	"log"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"log"
+
 	"time"
+
+	"github.com/minhvu2510/golang-gin/pkg/setting"
 )
 
 var db *gorm.DB
@@ -17,21 +20,26 @@ type Model struct {
 	ModifiedOn int `json:"modified_on"`
 	DeletedOn  int `json:"deleted_on"`
 }
+
 // Setup initializes the database instance
 func Setup() {
 	var err error
+	fmt.Println(" type database:", setting.DatabaseSetting)
 	db, err = gorm.Open(setting.DatabaseSetting.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		setting.DatabaseSetting.User,
 		setting.DatabaseSetting.Password,
 		setting.DatabaseSetting.Host,
 		setting.DatabaseSetting.Name))
+
 	if err != nil {
+		fmt.Println("-----setup db-----")
 		log.Fatalf("models.Setup err: %v", err)
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		return setting.DatabaseSetting.TablePrefix + defaultTableName
 	}
+
 	db.SingularTable(true)
 	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
 	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
@@ -39,6 +47,7 @@ func Setup() {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 }
+
 // CloseDB closes database connection (unnecessary)
 func CloseDB() {
 	defer db.Close()
@@ -50,13 +59,13 @@ func updateTimeStampForCreateCallback(scope *gorm.Scope) {
 		nowTime := time.Now().Unix()
 		if createTimeField, ok := scope.FieldByName("CreatedOn"); ok {
 			if createTimeField.IsBlank {
-				createTimeField.Set(nowTime)                     // set time create is now
+				createTimeField.Set(nowTime)
 			}
 		}
 
 		if modifyTimeField, ok := scope.FieldByName("ModifiedOn"); ok {
 			if modifyTimeField.IsBlank {
-				modifyTimeField.Set(nowTime)                     // set time modify init is now
+				modifyTimeField.Set(nowTime)
 			}
 		}
 	}
