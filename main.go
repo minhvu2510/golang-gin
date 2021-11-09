@@ -13,6 +13,7 @@ import (
 	"github.com/minhvu2510/golang-gin/models"
 	"github.com/minhvu2510/golang-gin/pkg/logging"
 	"github.com/minhvu2510/golang-gin/pkg/setting"
+	"github.com/minhvu2510/golang-gin/routers"
 )
 
 func init() {
@@ -35,6 +36,7 @@ func main() {
 		})
 	})
 	// setup router mới
+	routersInit := routers.InitRouter()
 
 	fmt.Println("+++++", setting.ServerSetting)
 	port := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
@@ -42,8 +44,9 @@ func main() {
 	writeTimeout := setting.ServerSetting.WriteTimeout
 	fmt.Println(port)
 	s := &http.Server{
-		Addr:           port,
-		Handler:        router,
+		Addr: port,
+		// Handler:        router,
+		Handler:        routersInit,
 		ReadTimeout:    readTimeout,
 		WriteTimeout:   writeTimeout,
 		MaxHeaderBytes: 1 << 20,

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/astaxie/beego/validation"
@@ -26,12 +27,13 @@ type auth struct {
 func GetAuth(c *gin.Context) {
 	appG := app.Gin{C: c}
 	valid := validation.Validation{}
-
 	username := c.PostForm("username")
 	password := c.PostForm("password")
+	fmt.Println("----dev-----", username)
 
 	a := auth{Username: username, Password: password}
 	ok, _ := valid.Valid(&a)
+	fmt.Println("----ok-----", ok)
 	// user pass truyen vao ko dung dinh dang
 	if !ok {
 		app.MarkErrors(valid.Errors)
