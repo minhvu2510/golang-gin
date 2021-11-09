@@ -6,3 +6,7 @@
 [INFO][request.go:12]2021/11/09 11:28:58 [Password.Required. Password Can not be empty]
 [INFO][request.go:12]2021/11/09 11:29:13 [Username.Required. Username Can not be empty]
 [INFO][request.go:12]2021/11/09 11:29:13 [Password.Required. Password Can not be empty]
+[INFO][request.go:12]2021/11/09 18:09:48 [Username.Required. Username Can not be empty]
+[INFO][request.go:12]2021/11/09 18:09:48 [Password.Required. Password Can not be empty]
+[INFO][request.go:12]2021/11/09 18:16:00 [Username.Required. Username Can not be empty]
+[INFO][request.go:12]2021/11/09 18:16:00 [Password.Required. Password Can not be empty]

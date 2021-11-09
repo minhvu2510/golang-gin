@@ -13,8 +13,8 @@ import (
 )
 
 type auth struct {
-	Username string `valid:"Required; MaxSize(50)"`
-	Password string `valid:"Required; MaxSize(50)"`
+	Username string `valid:"Required; MaxSize(50)" json:"username"`
+	Password string `valid:"Required; MaxSize(50)" json:"password"`
 }
 
 // @Summary Get Auth
@@ -27,8 +27,18 @@ type auth struct {
 func GetAuth(c *gin.Context) {
 	appG := app.Gin{C: c}
 	valid := validation.Validation{}
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+	// username := c.PostForm("username")
+	var json auth
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	fmt.Println("----------", json.Username)
+	// username := c.PostForm("username")
+	// password := c.PostForm("password")
+
+	username := json.Username
+	password := json.Password
 	fmt.Println("----dev-----", username)
 
 	a := auth{Username: username, Password: password}
