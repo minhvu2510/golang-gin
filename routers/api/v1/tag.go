@@ -57,3 +57,100 @@ func GetTags(c *gin.Context) {
 		"lists": tags,
 	})
 }
+
+// format data for add tag
+type AddTagForm struct {
+	Name      string `form:"name" json:"name" valid:"Required;MaxSize(100)"`
+	CreatedBy string `form:"created_by" json:"created_by" valid:"Required;MaxSize(100)"`
+	State     int    `form:"state" json:"state" valid:"Range(0,1)"`
+}
+
+//@Summary Add article tag
+// @Produce  json
+// @Param name body string true "Name"
+// @Param state body int false "State"
+// @Param created_by body int false "CreatedBy"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/tags [post]
+func AddTag(c *gin.Context) {
+	appG := app.Gin{C: c}
+	var addTag AddTagForm
+	if err := c.ShouldBindJSON(&addTag); err != nil {
+		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		return
+	}
+
+	tag := tag_service.Tag{
+		Name:      addTag.Name,
+		CreatedBy: addTag.CreatedBy,
+		State:     addTag.State,
+	}
+	// cehck exist tag
+	exists, err := tag.ExistByName()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_EXIST_TAG_FAIL, nil)
+		return
+	}
+	if exists {
+		appG.Response(http.StatusOK, e.ERROR_EXIST_TAG, nil)
+		return
+	}
+
+	// add tag
+	err_add := tag.Add()
+	if err_add != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_ADD_TAG_FAIL, nil)
+		return
+	}
+
+	// name := c.Query("name")
+	appG.Response(http.StatusOK, e.SUCCESS, nil)
+}
+
+// fomat data for edit tag
+type EditTagForm struct {
+	ID         int    `form:"id" json:"id" valid:"Required;Min(1)"`
+	Name       string `form:"name" json:"name" valid:"Required;MaxSize(100)"`
+	ModifiedBy string `form:"modified_by" json:"modified_by" valid:"Required;MaxSize(100)"`
+	State      int    `form:"state" json:"state" valid:"Range(0,1)"`
+}
+
+func EditTag(c *gin.Context) {
+	var (
+		appG = app.Gin{C: c}
+		form = EditTagForm{ID: com.StrTo(c.Param("id")).MustInt()}
+	)
+
+	httpCode, errCode := app.BindAndValid(c, &form)
+	if errCode != e.SUCCESS {
+		appG.Response(httpCode, errCode, nil)
+		return
+	}
+
+	tagService := tag_service.Tag{
+		ID:         form.ID,
+		Name:       form.Name,
+		ModifiedBy: form.ModifiedBy,
+		State:      form.State,
+	}
+
+	exists, err := tagService.ExistByID()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_EXIST_TAG_FAIL, nil)
+		return
+	}
+
+	if !exists {
+		appG.Response(http.StatusOK, e.ERROR_NOT_EXIST_TAG, nil)
+		return
+	}
+
+	err = tagService.Edit()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_EDIT_TAG_FAIL, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.SUCCESS, nil)
+}
