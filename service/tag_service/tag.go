@@ -57,6 +57,7 @@ func (t *Tag) Add() error {
 func (t *Tag) ExistByName() (bool, error) {
 	return models.ExistTagByName(t.Name)
 }
+
 func (t *Tag) getMaps() map[string]interface{} {
 	maps := make(map[string]interface{})
 	maps["deleted_on"] = 0
@@ -82,4 +83,7 @@ func (t *Tag) Edit() error {
 	}
 
 	return models.EditTag(t.ID, data)
+}
+func (t *Tag) Delete() error {
+	return models.DeleteTag(t.ID)
 }

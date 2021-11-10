@@ -3,7 +3,7 @@ package e
 var MsgFlags = map[int]string{
 	SUCCESS:                         "ok",
 	ERROR:                           "fail",
-	INVALID_PARAMS:                  "INVALID_PARAMS",
+	INVALID_PARAMS:                  "Yêu cầu tham số lỗi",
 	ERROR_EXIST_TAG:                 "ERROR_EXIST_TAG",
 	ERROR_EXIST_TAG_FAIL:            "ERROR_EXIST_TAG_FAIL",
 	ERROR_NOT_EXIST_TAG:             "ERROR_NOT_EXIST_TAG",
