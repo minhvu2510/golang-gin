@@ -60,7 +60,7 @@ func GetAuth(c *gin.Context) {
 		appG.Response(http.StatusUnauthorized, e.ERROR_AUTH, nil)
 		return
 	}
-	token, err := util.GenerateToken(username, password)
+	token, err := util.GenerateToken()
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_AUTH_TOKEN, nil)
 		return
