@@ -159,32 +159,31 @@ func DeleteTag(c *gin.Context) {
 	appG := app.Gin{C: c}
 	valid := validation.Validation{}
 	id := com.StrTo(c.Param("id")).MustInt()
-	valid.Min(id, 1, "id").Message("ID phải lới hơn 0")
+	valid.Min(id, 1, "id").Message("ID must > 1")
+
 	if valid.HasErrors() {
-		fmt.Println("----valide error-----")
+		fmt.Println(valid.Errors[0].Message)
 		app.MarkErrors(valid.Errors)
 		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
 		return
 	}
-	fmt.Println("-----delete----")
-	tagService := tag_service.Tag{
-		ID: id,
-	}
-	exits, err := tagService.ExistByID()
+
+	tagService := tag_service.Tag{ID: id}
+	exists, err := tagService.ExistByID()
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_EXIST_TAG_FAIL, nil)
 		return
 	}
 
-	if !exits {
+	if !exists {
 		appG.Response(http.StatusOK, e.ERROR_NOT_EXIST_TAG, nil)
 		return
 	}
+
 	if err := tagService.Delete(); err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_DELETE_TAG_FAIL, nil)
 		return
 	}
 
 	appG.Response(http.StatusOK, e.SUCCESS, nil)
-
 }

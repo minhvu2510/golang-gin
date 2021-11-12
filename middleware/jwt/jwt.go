@@ -26,7 +26,7 @@ func JWT() gin.HandlerFunc {
 		} else {
 			// _, err := util.ParseToken(token)
 			tkParse, err2 := util.ParseToken(token_header)
-			fmt.Println(tkParse)
+			fmt.Println("---+++", tkParse)
 			fmt.Println(err2)
 			if err2 != nil {
 				switch err2.(*jwt.ValidationError).Errors {
