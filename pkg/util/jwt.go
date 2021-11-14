@@ -32,7 +32,7 @@ func GenerateToken(username, password string) (string, error) {
 	}
 	// mySigningKey := []byte("AllYourBase") // for hs256
 	// -----------------
-	data, err := ioutil.ReadFile("/home/vunm/golang/dev/golang-gin/pkg/util/pri.pem")
+	data, err := ioutil.ReadFile("pkg/util/pri.pem")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -41,6 +41,7 @@ func GenerateToken(username, password string) (string, error) {
 	fmt.Print(string(data))
 	key, err := jwt.ParseRSAPrivateKeyFromPEM(data)
 	if err != nil {
+		// fmt.Errorf("error parsing RSA private key: %v\n", err)
 		fmt.Println("error parsing RSA private key: %v\n", err)
 		// return "", fmt.Errorf("error parsing RSA private key: %v\n", err)
 	}
@@ -73,7 +74,7 @@ func GenerateToken(username, password string) (string, error) {
 
 // ParseToken parsing token RSA 256
 func ParseToken(tokenString string) (*jwt.Token, error) {
-	publicKey, err := ioutil.ReadFile("/home/vunm/golang/dev/golang-gin/pkg/util/publ.pub")
+	publicKey, err := ioutil.ReadFile("pkg/util/publ.pub")
 	if err != nil {
 		return nil, fmt.Errorf("error reading public key file: %v\n", err)
 	}
